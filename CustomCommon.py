@@ -53,7 +53,7 @@ class CustomCommon():
         # NOTE: 一致する要素数を取得し、既定値を超えているか判定
         ret = np.count_nonzero(thresh_cap_img == thresh_img)
         print('画像比較中')
-        print(ret)
+        print(f'比較結果：{ret}')
         return ret >= 5500
 
 

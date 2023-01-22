@@ -42,25 +42,30 @@ def main():
 
     custom = CustomCommon(nx, controller_index)
 
+    print('ゲームを開始します！')
     # NOTE: ゲームの起動
     custom.game_start()
 
     now = datetime.datetime.now()
     # NOTE: 任意の時間を設定
-    after_hour = datetime.timedelta(hours=0, minutes=10)
+    after_hour = datetime.timedelta(hours=00, minutes=10)
 
+    print('お金稼ぎスタート！')
     # TODO: 設定金額を設けて金額に達したら処理を終了したい
     while True:
         cap_img = custom.get_capture()
         if custom.check_report(cap_img):
+            print('レポートを書きます')
             # NOTE: レポート実行
             custom.report()
+            print('レポートを書きました')
             # NOTE: 設定時間を経過しているかつレポートが終わったタイミングで処理終了
             if not datetime.datetime.now() < now + after_hour:
                 break
         custom.streak_button()
 
-    print('処理終了...')
+    print('本日の業務を終了します。。')
+    print('お疲れ様でした。。。')
 
 
 if __name__ == "__main__":
