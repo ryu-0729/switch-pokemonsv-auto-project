@@ -51,7 +51,6 @@ def main():
     after_hour = datetime.timedelta(hours=00, minutes=10)
 
     print('お金稼ぎスタート！')
-    # TODO: 設定金額を設けて金額に達したら処理を終了したい
     while True:
         cap_img = custom.get_capture()
         if custom.check_report(cap_img):
@@ -62,6 +61,11 @@ def main():
             # NOTE: 設定時間を経過しているかつレポートが終わったタイミングで処理終了
             if not datetime.datetime.now() < now + after_hour:
                 break
+
+        if custom.check_re_entry(cap_img):
+            print('休憩いたします。。。')
+            custom.restart()
+            print('業務を再開いたします。')
         custom.streak_button()
 
     print('本日の業務を終了します。。')
