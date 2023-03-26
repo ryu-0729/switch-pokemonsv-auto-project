@@ -1,10 +1,8 @@
-import time
 from random import randint
 import datetime
-
 import nxbt
-from nxbt import Buttons
-from nxbt import Sticks
+
+from CustomCommon import CustomCommon
 
 
 def random_colour():
@@ -15,21 +13,7 @@ def random_colour():
         randint(0, 255),
     ]
 
-def start_game(cIndex):
-    for _ in range(2):
-        nx.press_buttons(cIndex, [Buttons.B], down=1.0)
-        time.sleep(2)
-    
-    for _ in range(4):
-        nx.tilt_stick(cIndex, Sticks.LEFT_STICK, -100, 0, 0.25, 0.25)
-
-    nx.tilt_stick(cIndex, Sticks.LEFT_STICK, 0, 100, 0.25, 0.25)
-    for _ in range(2):
-        nx.press_buttons(cIndex, [Buttons.A], down=1.0)
-
-
-if __name__ == "__main__":
-
+def main():
     # Init NXBT
     nx = nxbt.Nxbt()
 
@@ -50,26 +34,43 @@ if __name__ == "__main__":
 
     # Select the last controller for input
     controller_index = controller_index[-1]
-    print('connecting')
+    print('接続中...')
 
     # Wait for the switch to connect to the controller
     nx.wait_for_connection(controller_index)
+    print('接続完了！')
 
+    custom = CustomCommon(nx, controller_index)
+
+    print('ゲームを開始します！')
     # NOTE: ゲームの起動
-    start_game(controller_index)
-    time.sleep(25)
+    custom.game_start()
 
     now = datetime.datetime.now()
     # NOTE: 任意の時間を設定
-    after_hour = datetime.timedelta(hours=0, minutes=30)
+    after_hour = datetime.timedelta(hours=00, minutes=10)
 
-    print(datetime.datetime.now())
-    print(now + after_hour)
+    print('お金稼ぎスタート！')
+    while True:
+        cap_img = custom.get_capture()
+        if custom.check_report(cap_img):
+            print('レポートを書きます')
+            # NOTE: レポート実行
+            custom.report()
+            print('レポートを書きました')
+            # NOTE: 設定時間を経過しているかつレポートが終わったタイミングで処理終了
+            if not datetime.datetime.now() < now + after_hour:
+                break
 
-    # NOTE: 指定した時間までAボタン連打
-    while datetime.datetime.now() < now + after_hour:
-        print(datetime.datetime.now())
-        nx.press_buttons(controller_index, [Buttons.R], 1.0)
-        nx.press_buttons(controller_index, [Buttons.A], 1.0)
+        if custom.check_re_entry(cap_img):
+            print('休憩いたします。。。')
+            custom.restart()
+            print('業務を再開いたします。')
+        custom.streak_button()
 
-    print("Exiting...")
+    print('本日の業務を終了します。。')
+    print('お疲れ様でした。。。')
+
+
+if __name__ == "__main__":
+    main()
