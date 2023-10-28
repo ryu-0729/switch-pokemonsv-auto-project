@@ -11,7 +11,8 @@ def main():
 
     # NOTE: 比較する際にはトリミングは必須。warningになる
     test = np.count_nonzero(thresh_img == thresh_img)
-    print(test) # NOTE: 6250で判定
+    print(test)  # NOTE: 6250で判定
+
 
 if __name__ == '__main__':
     main()
