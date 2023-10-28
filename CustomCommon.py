@@ -1,15 +1,14 @@
 import time
+
 import cv2 as cv
 import numpy as np
-from nxbt import Buttons
-from nxbt import Sticks
+from nxbt import Buttons, Sticks
 
 
 class CustomCommon():
     def __init__(self, nx, cIndex):
         self.nx = nx
         self.cIndex = cIndex
-
 
     def game_start(self):
         """ NOTE: コントローラーの持ち方/順番を変える画面からゲームを起動するまで """
@@ -25,7 +24,6 @@ class CustomCommon():
         for _ in range(2):
             self.nx.press_buttons(self.cIndex, [Buttons.A], down=1.0)
 
-
     def get_capture(self):
         """ NOTE: キャプチャの取得と画像の返却 """
 
@@ -35,7 +33,6 @@ class CustomCommon():
             ret, frame = cap.read()
 
         return frame
-    
 
     def image_comparison(self, img, trimming_cap_img):
         """ NOTE: 画像の比較結果を返す """
@@ -52,28 +49,25 @@ class CustomCommon():
         ret = np.count_nonzero(thresh_cap_img == thresh_img)
         return ret
 
-
     def check_report(self, cap_img):
         """ NOTE: キャプチャ画像と学校最強大会エントリー画面の「学校最強大会」の画像と一致するか判定 """
 
-        trimming_cap_img = cap_img[125 : 175, 400 : 525]
+        trimming_cap_img = cap_img[125:175, 400:525]
         img = cv.imread('./img/trimming.jpg')
         ret = self.image_comparison(img, trimming_cap_img)
 
         print(f'レポート比較結果：{ret}')
         return ret >= 5500
-    
 
     def check_re_entry(self, cap_img):
         """ NOTE: キャプチャ画像とリエントリー判定用画像と一致するか判定 """
 
-        trimming_cap_img = cap_img[275 : 400, 25 : 200]
+        trimming_cap_img = cap_img[275:400, 25:200]
         img = cv.imread('./img/reentry_trimming.jpg')
         ret = self.image_comparison(img, trimming_cap_img)
 
         print(f'リエントリー比較結果：{ret}')
         return ret >= 17000
-
 
     def report(self):
         """ NOTE: レポートを書く """
@@ -86,13 +80,11 @@ class CustomCommon():
         self.nx.press_buttons(self.cIndex, [Buttons.B], down=1.0)
         self.nx.press_buttons(self.cIndex, [Buttons.B], down=1.0)
 
-
     def streak_button(self):
         """ NOTE: RボタンとAボタンの連打 """
 
         self.nx.press_buttons(self.cIndex, [Buttons.R])
         self.nx.press_buttons(self.cIndex, [Buttons.A])
-
 
     def restart(self):
         """ NOTE: ゲームを終了して再起動 """

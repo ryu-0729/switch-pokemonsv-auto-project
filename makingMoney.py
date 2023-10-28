@@ -1,5 +1,6 @@
-from random import randint
 import datetime
+from random import randint
+
 import nxbt
 
 from CustomCommon import CustomCommon
@@ -12,6 +13,7 @@ def random_colour():
         randint(0, 255),
         randint(0, 255),
     ]
+
 
 def main():
     # Init NXBT
