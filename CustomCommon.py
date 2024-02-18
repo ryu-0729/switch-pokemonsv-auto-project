@@ -8,7 +8,7 @@ from nxbt import PRO_CONTROLLER, Buttons, Nxbt, Sticks
 
 class CustomCommon:
     def __init__(self):
-        self.nx = Nxbt
+        self.nx = Nxbt()
         self.controller_index = []
 
     def setup_controller(self):
