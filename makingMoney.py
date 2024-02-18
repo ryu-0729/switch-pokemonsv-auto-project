@@ -1,10 +1,8 @@
+import datetime
 import time
 from random import randint
-import datetime
 
-import nxbt
-from nxbt import Buttons
-from nxbt import Sticks
+from nxbt import PRO_CONTROLLER, Buttons, Nxbt, Sticks
 
 
 def random_colour():
@@ -15,23 +13,24 @@ def random_colour():
         randint(0, 255),
     ]
 
-def start_game(cIndex):
-    for _ in range(2):
-        nx.press_buttons(cIndex, [Buttons.B], down=1.0)
-        time.sleep(2)
-    
-    for _ in range(4):
-        nx.tilt_stick(cIndex, Sticks.LEFT_STICK, -100, 0, 0.25, 0.25)
 
-    nx.tilt_stick(cIndex, Sticks.LEFT_STICK, 0, 100, 0.25, 0.25)
+def start_game(controller_index):
     for _ in range(2):
-        nx.press_buttons(cIndex, [Buttons.A], down=1.0)
+        nx.press_buttons(controller_index, [Buttons.B], down=1.0)
+        time.sleep(2)
+
+    for _ in range(4):
+        nx.tilt_stick(controller_index, Sticks.LEFT_STICK, -100, 0, 0.25, 0.25)
+
+    nx.tilt_stick(controller_index, Sticks.LEFT_STICK, 0, 100, 0.25, 0.25)
+    for _ in range(2):
+        nx.press_buttons(controller_index, [Buttons.A], down=1.0)
 
 
 if __name__ == "__main__":
 
     # Init NXBT
-    nx = nxbt.Nxbt()
+    nx = Nxbt()
 
     # Get a list of all available Bluetooth adapters
     adapters = nx.get_available_adapters()
@@ -42,15 +41,16 @@ if __name__ == "__main__":
     # Switch Pro Controllers
     for i in range(0, len(adapters)):
         index = nx.create_controller(
-            nxbt.PRO_CONTROLLER,
+            PRO_CONTROLLER,
             adapter_path=adapters[i],
             colour_body=random_colour(),
-            colour_buttons=random_colour())
+            colour_buttons=random_colour(),
+        )
         controller_index.append(index)
 
     # Select the last controller for input
     controller_index = controller_index[-1]
-    print('connecting')
+    print("connecting")
 
     # Wait for the switch to connect to the controller
     nx.wait_for_connection(controller_index)
