@@ -28,7 +28,7 @@ $ sudo apt upgrade
 プロジェクトのcloneとnxbtのインストール
 
 ```
-$ git clone https://github.com/ryu-0729/switch-pokemonsv-auto-project.git
+$ git clone -b old_making_money https://github.com/ryu-0729/switch-pokemonsv-auto-project.git
 $ sudo pip3 install nxbt
 ```
 
